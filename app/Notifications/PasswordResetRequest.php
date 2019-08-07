@@ -7,18 +7,19 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SignupActivate extends Notification
+class PasswordResetRequest extends Notification
 {
     use Queueable;
+    protected $token;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($token)
     {
-        //
+        $this->token = $token;
     }
 
     /**
@@ -40,13 +41,11 @@ class SignupActivate extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('api/auth/signup/activate/'.$notifiable->activation_token);
-
+        $url = url('/api/password/find/'.$this->token);
         return (new MailMessage)
-                    ->subject('verify your email')
-                    ->line('Thank you for  signup please verify your email using this url')
-                    ->action('verify', url($url))
-                    ->line('Thank you for using our application!');
+            ->line('You are receiving this email because we        received a password reset request for your account.')
+            ->action('Reset Password', url($url))
+            ->line('If you did not request a password reset, no further action is required.');
     }
 
     /**

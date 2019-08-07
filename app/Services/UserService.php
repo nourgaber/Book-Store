@@ -2,8 +2,15 @@
 
 
 namespace App\Services;
+use Illuminate\Http\Request;
+
 use App\Services\Interfaces\UserServiceInterface;
 use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use App\User;
+use App\Notifications\SignupActivate;
+use App\Notifications\WelcomeEmail; 
 /**
  * Class UserService
  * @package App\Services
@@ -25,15 +32,12 @@ class UserService implements UserServiceInterface
     }
     public function show($id)
     {
-        $this->Userrepo -> show($id);
+        return  $this->Userrepo -> show($id);
     }
-    public function get($User_id)
+   
+    public function index()
     {
-       
-    }
-    public function all()
-    {
-        $this->Userrepo -> all();
+      return  $this->Userrepo -> index();
     }
     public function destroy($id)
     {
@@ -43,9 +47,5 @@ class UserService implements UserServiceInterface
     {
         $this->Userrepo -> update($id,$User_data);
     }
-    public function login($email,$password)
-    {
-        $this->Userrepo ->login( $email,$password);
-
-    }
+   
 }

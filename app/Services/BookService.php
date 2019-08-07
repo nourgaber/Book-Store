@@ -19,24 +19,30 @@ class BookService implements BookServiceInterface
         $this->bookrepo = $bookrepo;
     }
 
-    public function show($id)
+    
+
+    public function show($book_id)
 {
-    $this->bookrepo -> show($id);
+    return  $this->bookrepo -> show($book_id);
 }
-    public function get($post_id)
+    public function index()
     {
-       
+        return $this->bookrepo -> index();
     }
-    public function all()
+    public function delete($book_id)
     {
-        $this->bookrepo -> all();
-    }
-    public function destroy($post_id)
-    {
+        $this->bookrepo -> delete($book_id);
 
     }
-    public function update($post_id, array $post_data)
+    public function update($book_id, array $book_data)
     {
-        
+        return  $this->bookrepo -> update($book_id,$book_data);
+
     }
+
+    public function store(array $book_data)
+    {
+        return  $this->bookrepo -> store($book_data);
+    }
+   
 }

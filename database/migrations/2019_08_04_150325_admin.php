@@ -17,6 +17,7 @@ class Admin extends Migration
         $table->string('name');
         $table->integer('id')->autoIncrement();
         $table->string('password');
+        $table->timestamps();
     });
     }
 

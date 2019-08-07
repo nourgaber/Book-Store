@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Services\UserService;
- 
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 class UserController extends Controller
 {
 
@@ -15,17 +18,18 @@ class UserController extends Controller
         $this->user = $userservice;
     }
 
-    public  function FindUserByid(){
+    public function FindUserByid()
+    {
         echo "index called";
-        $users =$this->user ->all();
+        $users = $this->user->all();
         //$books = DB::select('select * from Books where id = ?', [1]);
         dd($users);
     }
 
     public function store(Request $request)
-{
-    $this->user ->store($request->name,$request->email,$request->password);
-}
+    {
+        $this->user->store($request->name, $request->email, $request->password);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -33,7 +37,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+       return $users = $this->user->index();
     }
 
     /**
@@ -52,7 +56,6 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-   
 
     /**
      * Display the specified resource.
@@ -61,10 +64,10 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
-{
-    $this->user ->show( $request->id);
-   
-}
+    {
+        $this->user->show($request->id);
+
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -86,7 +89,7 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
-       $this->user->update($request->id,$request->all());
+        $this->user->update($request->id, $request->all());
     }
 
     /**
@@ -97,11 +100,9 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
-        $this->user ->destroy( $request->id);
+        $this->user->destroy($request->id);
     }
 
-    public function login(Request $request)
-    {
-        $this->user ->login( $request->email,$request->password);
-    }
+
+  
 }

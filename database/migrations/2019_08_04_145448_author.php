@@ -16,6 +16,7 @@ class Author extends Migration
         Schema::create('Author', function (Blueprint $table) {
         $table->integer('id')->autoIncrement();
         $table->string('name');
+        $table->timestamps();
     });
     }
 

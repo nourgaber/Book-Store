@@ -7,18 +7,16 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SignupActivate extends Notification
+class WelcomeEmail extends Notification
 {
     use Queueable;
-
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($user)
     {
-        //
     }
 
     /**
@@ -40,12 +38,10 @@ class SignupActivate extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('api/auth/signup/activate/'.$notifiable->activation_token);
 
         return (new MailMessage)
-                    ->subject('verify your email')
-                    ->line('Thank you for  signup please verify your email using this url')
-                    ->action('verify', url($url))
+                    ->subject('WELCOME')
+                    ->line('Welcome '.$notifiable->name. ' to our application')
                     ->line('Thank you for using our application!');
     }
 

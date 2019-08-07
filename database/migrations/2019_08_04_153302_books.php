@@ -13,14 +13,17 @@ class Books extends Migration
      */
     public function up()
     {
-        Schema::create('Books', function (Blueprint $table) {
+        Schema::create('books', function (Blueprint $table) {
             $table->integer('id')->autoIncrement();
             $table->string('book_name');
             $table->float('book_renting_price');
             $table->float('book_price');
             $table->integer('author_id');
+            $table->timestamps();
+            $table->softDeletes();
+            
         });
-        Schema::table('Books', function (Blueprint $table) {
+        Schema::table('books', function (Blueprint $table) {
          
             $table->foreign('author_id')->references('id')->on('Author');
         });
@@ -34,6 +37,6 @@ class Books extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('books');
     }
 }

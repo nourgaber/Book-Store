@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class SignupActivate extends Notification
+class PasswordResetSuccess extends Notification
 {
     use Queueable;
 
@@ -40,14 +40,9 @@ class SignupActivate extends Notification
      */
     public function toMail($notifiable)
     {
-        $url = url('api/auth/signup/activate/'.$notifiable->activation_token);
-
         return (new MailMessage)
-                    ->subject('verify your email')
-                    ->line('Thank you for  signup please verify your email using this url')
-                    ->action('verify', url($url))
-                    ->line('Thank you for using our application!');
-    }
+        ->line('You have changed your password succefully.');
+     }
 
     /**
      * Get the array representation of the notification.

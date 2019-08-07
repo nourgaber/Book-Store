@@ -4,25 +4,36 @@ use App\Book;
 use App\Repositories\Interfaces\BookRepositoryInterface;
 class BookRepository implements BookRepositoryInterface
 {
-    public function get($post_id)
+  
+
+    public function show($book_id)
     {
 
-    return Book::find($BookISPN);
+    return Book::find($book_id);
     }
 
-    public function all()
+    public function index()
     {
         return Book::all();
     }
-    public function delete($post_id)
+    public function delete($book_id)
     {
-        Book::destroy($post_id);
+        Book::destroy($book_id);
+        echo 'book deleted';
 
     }
-    public function update($post_id, array $post_data)
+    public function update($book_id, array $book_data)
     {
-        Book::find($post_id)->update($post_data);
+        $book= Book::find($book_id);
+        $book->update($book_data);
+        return $book;
       
 
     }
+    public function store(array $book_data)
+    {
+        return $Book = Book::create($book_data);
+    }
+  
+
 }

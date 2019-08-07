@@ -12,23 +12,28 @@ class UserRepository implements UserRepositoryInterface
    $user->password = $password;
    $user->save();
 }
-    public function get($user_id)
+    public function show($user_id)
     {
        return  User::find($user_id);
     }
-
-    public function all()
+    public function showUserByemail($user_email)
     {
+       return User::where('email', $user_email)->first();
+    }
+
+    public function index()
+    {
+        //echo "hiii";
         return User::all();
     }
-    public function show($id)
-    {
+    //public function show($id)
+   // {
          // Retrieve a model by its primary key...
-    $user = User::find($id);
-    echo $user . '<br>';
+   // $user = User::find($id);
+   // echo $user . '<br>';
   //  $count = App\Post::where('category', 'laravel')->count();
    // $max = App\Post::where('category', 'laravel')->max('views');
-    }
+   // }
     public function destroy($user_id)
     {
         User::destroy($user_id);
@@ -39,17 +44,5 @@ class UserRepository implements UserRepositoryInterface
     {
         User::find($user_id)->update($User_data);
     }
-    public function login($email,$password)
-    {
-        $user=User::where("email",$email)->get();
-        echo $user;
-        if($user == null)
-        echo 'wrong email';
-        else if($user->password == $password)
-        echo 'welcome '.$user->name;
-        else
-        echo 'wrong password';
-
-    }
-    
+   
 }
