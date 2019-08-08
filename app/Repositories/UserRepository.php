@@ -1,16 +1,22 @@
 <?php
 namespace App\Repositories;
 use App\User;
+use App\Role;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 class UserRepository implements UserRepositoryInterface
 {
-    public function store($name,$email,$password)
+    public function store($name,$email,$password,$role)
 {
    $user = new User;
    $user->name =$name;
    $user->email = $email;
    $user->password = $password;
+   $user-> activation_token =str_random(60);
    $user->save();
+   $user->roles()->attach(Role::where('name',$role)->first());
+  // $user->roles()
+   //    ->attach(Role::where('name','employee')->first());
+ return $user;
 }
     public function show($user_id)
     {
@@ -26,14 +32,7 @@ class UserRepository implements UserRepositoryInterface
         //echo "hiii";
         return User::all();
     }
-    //public function show($id)
-   // {
-         // Retrieve a model by its primary key...
-   // $user = User::find($id);
-   // echo $user . '<br>';
-  //  $count = App\Post::where('category', 'laravel')->count();
-   // $max = App\Post::where('category', 'laravel')->max('views');
-   // }
+    
     public function destroy($user_id)
     {
         User::destroy($user_id);
@@ -44,5 +43,8 @@ class UserRepository implements UserRepositoryInterface
     {
         User::find($user_id)->update($User_data);
     }
-   
+    public function findUserByActivationToken($token)
+    {
+ return User::where('activation_token', $token)->first();
+    }
 }

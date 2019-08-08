@@ -16,6 +16,7 @@ class UserController extends Controller
     public function __construct(UserService $userservice)
     {
         $this->user = $userservice;
+        $this->middleware('auth');
     }
 
     public function FindUserByid()
@@ -28,7 +29,10 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $this->user->store($request->name, $request->email, $request->password);
+        
+     //   $request->user()->authorizeRoles(['employee', 'manager']);
+
+        $this->user->store($request->name, $request->email, $request->password,$request->role);
     }
     /**
      * Display a listing of the resource.
@@ -40,22 +44,6 @@ class UserController extends Controller
        return $users = $this->user->index();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
 
     /**
      * Display the specified resource.
@@ -69,17 +57,7 @@ class UserController extends Controller
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request)
-    {
-        //
-    }
-
+ 
     /**
      * Update the specified resource in storage.
      *
@@ -89,6 +67,7 @@ class UserController extends Controller
      */
     public function update(Request $request)
     {
+        $request->user()->authorizeRoles(['manager']);
         $this->user->update($request->id, $request->all());
     }
 
@@ -100,6 +79,7 @@ class UserController extends Controller
      */
     public function destroy(Request $request)
     {
+        $request->user()->authorizeRoles(['employee', 'manager']);
         $this->user->destroy($request->id);
     }
 

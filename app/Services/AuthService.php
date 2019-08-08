@@ -3,7 +3,7 @@
 
 namespace App\Services;
 use Illuminate\Http\Request;
-
+use App\Role;
 use App\Services\Interfaces\AuthServiceInterface;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +13,7 @@ use App\Notifications\SignupActivate;
 use App\Notifications\WelcomeEmail; 
 use App\Mail\UserAuthEmail;
 use Illuminate\Support\Facades\Mail;
+
 /**
  * Class UserService
  * @package App\Services
@@ -23,13 +24,15 @@ class AuthService implements AuthServiceInterface
     /**
      * UserService constructor.
      */
-    public function __construct()
+    protected $Userrepo;
+   
+    public function __construct(UserRepository $Userrepo)
     {
-       //
+        $this->Userrepo = $Userrepo;
     }
     public function signupActivate($token)
     {
-        $user = User::where('activation_token', $token)->first();
+        $user = $this->Userrepo->findUserByActivationToken($token);
         if (!$user) {
             return response()->json([
                 'message' => 'This activation token is invalid.'
@@ -79,13 +82,9 @@ class AuthService implements AuthServiceInterface
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|confirmed'
         ]);
-        $user = new User([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'activation_token' => str_random(60)
-        ]);
-        $user->save();
+        
+        $user = $this->Userrepo->store($request->name,$request->email,$request->password,$request->role);
+     
      $url = url('api/auth/signup/activate/'.$user->activation_token);
         Mail::to(  $request->email)->queue(new UserAuthEmail($request->name,$url));
        // $user->notify(new SignupActivate($user));
@@ -94,6 +93,7 @@ class AuthService implements AuthServiceInterface
             'message' => 'Successfully created user!'
         ], 201);
     }
+  
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();

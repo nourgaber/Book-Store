@@ -1,6 +1,8 @@
 <?php
 
 namespace App;
+use App\Author;
+use App\User;
 
 
 use Illuminate\Database\Eloquent\Model;
@@ -18,5 +20,12 @@ class Book extends Model
     protected $fillable = [
         'book_name', 'book_renting_price', 'book_price','author_id',
     ];
-
+    public function Authors()
+    {
+      return $this->belongsToMany(Author::class);
+    }
+    public function users()
+    {
+      return $this->belongsToMany(User::class);
+    }
 }
