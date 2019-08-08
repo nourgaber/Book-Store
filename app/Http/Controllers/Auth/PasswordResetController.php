@@ -36,11 +36,7 @@ class PasswordResetController extends Controller
         ]);
        $result= $this->passwordservice -> create( $request->email);
 
-       if(!$result)
-       response()->json([
-        'message' => 'We cannot find a user with that e-mail address'], 404);
-        else
-        response()->json([
+       return response()->json([
             'message' => 'We have e-mailed your password reset link!'
         ]);
     }
@@ -53,13 +49,10 @@ class PasswordResetController extends Controller
      */
     public function find($token)
     {
-        $result= $this->passwordservice -> find($token);
-        $passwordReset = PasswordReset::where('token', $token)
-            ->first();
-        if (!$result)
-            return response()->json([
-                'message' => 'This password reset token is invalid.'
-            ], 404);
+        $passwordReset= $this->passwordservice -> find($token);
+        
+       
+            
     
         return response()->json($passwordReset);
     }
@@ -80,17 +73,8 @@ class PasswordResetController extends Controller
             'password' => 'required|string|confirmed',
             'token' => 'required|string'
         ]);
-       $result= $this->passwordservice -> reset($request->token,$request->email,$request->password);
+       $user= $this->passwordservice -> reset($request->token,$request->email,$request->password);
 
-        
-        if ($result==1)
-            return response()->json([
-                'message' => 'This password reset token is invalid.'
-            ], 404);
-        if ($result==2)
-            return response()->json([
-                'message' => 'We cant find a user with that e-mail address.'
-            ], 404);
        
         return response()->json($user);
     }

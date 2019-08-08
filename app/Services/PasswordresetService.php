@@ -37,7 +37,8 @@ class PasswordresetService
     {
         $user =  $this->Userrepo->showUserByemail($email);
         if (!$user)
-            return false;
+        return response()->json([
+            'message' => 'We cannot find a user with that e-mail address'], 404);
         $passwordReset = $this->PasswordResetRepo->getPasswordReset($user);
         if ($user && $passwordReset)
             $user->notify(
@@ -49,28 +50,34 @@ class PasswordresetService
     {
         $passwordReset = $this->PasswordResetRepo-> FindByToken($token);
         if (!$passwordReset)
-            return false;
+        return response()->json([
+            'message' => 'This password reset token is invalid.'
+        ], 404);
         if (Carbon::parse($passwordReset->updated_at)->addMinutes(720)->isPast()) {
             $passwordReset->delete();
-            return false;
+            return response()->json([
+                'message' => 'This password reset token is invalid.'
+            ], 404);
         }
-        return response()->json($passwordReset);
+        return $passwordReset;
     }
 
     public function reset($token,$email,$password)
     {
         
         $passwordReset =  $this->PasswordResetRepo->findbyTokenEmail($token,$email);
-        if (!$passwordReset)
-        dd(  $passwordReset);
-            return 1;
+        if (!$passwordReset)     
+       return response()->json([
+            'message' => 'This password reset token is invalid.' ], 404);
         $user = $this->Userrepo->showUserByemail($passwordReset->email);
         if (!$user)
-            return 2;
+        return response()->json([
+            'message' => 'We cant find a user with that e-mail address.'
+        ], 404);
         $user->password = bcrypt($password);
         $user->save();
         $passwordReset->delete();
         $user->notify(new PasswordResetSuccess($passwordReset));
-        return 3;
+        return $user;
     }
 }

@@ -19,6 +19,7 @@ class PasswordResetRepository
     {
 return PasswordReset::where('token', $token)
 ->first();
+
     }
 
     public function findbyTokenEmail($token,$email)
