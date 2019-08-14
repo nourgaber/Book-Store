@@ -11,8 +11,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 
 use App\User;
 use Illuminate\Mail\Mailable;
+use App\Mail\UserAuthEmail;
+use Mail;
 
-class SendEmail implements ShouldQueue
+class SendEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,10 +34,12 @@ protected $mail;
  * @param User $user
  * @param Mailable $mail
  */
-public function __construct(User $user, Mailable $mail)
+protected $url;
+public function __construct(User $user,$url)
 {
     $this->user = $user;
-    $this->mail = $mail;
+    $this->url = $url;
+  //  $this->mail = $mail;
 }
     /**
      * Execute the job.
@@ -44,7 +48,8 @@ public function __construct(User $user, Mailable $mail)
      */
     public function handle()
     {
-        //
+        Mail::to( $this->user->email)->send(new UserAuthEmail( $this->user->name, $this->url));
+
     }
 
 }

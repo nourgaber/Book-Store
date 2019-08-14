@@ -28,7 +28,7 @@ class UserService implements UserServiceInterface
 
     public function store($name,$email,$password)
     {
-        $this->Userrepo ->store($name,$email,$password);
+        return $this->Userrepo ->store($name,$email,$password);
     }
     public function show($id)
     {
@@ -45,7 +45,9 @@ class UserService implements UserServiceInterface
     }
     public function update($id,array $User_data)
     {
-        $this->Userrepo -> update($id,$User_data);
+         $this->Userrepo -> update($id,$User_data);
+         return  $this->Userrepo -> show($id);
+
     }
    
 }

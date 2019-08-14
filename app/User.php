@@ -9,6 +9,7 @@ use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Book;
 use App\Role;
+use App\Events\UserEvent;
 
 class User extends Authenticatable
 {
@@ -43,6 +44,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    protected $dispatchesEvents = [
+      'saving' => \App\Events\UserEvent::class,
+  ];
 
     public function roles()
 {
@@ -66,7 +70,7 @@ public function authorizeRoles($roles)
 */
 public function hasAnyRole($roles)
 {
-  return null !== $this->roles()->whereIn(‘name’, $roles)->first();
+  return null !== $this->roles()->whereIn('name', $roles)->first();
 }
 /**
 * Check one role
@@ -74,7 +78,7 @@ public function hasAnyRole($roles)
 */
 public function hasRole($role)
 {
-  return null !== $this->roles()->where(‘name’, $role)->first();
+  return null !== $this->roles()->where('name', $role)->first();
 }
 
 public function Books()

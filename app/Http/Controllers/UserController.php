@@ -7,6 +7,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\UserEvent;
 
 class UserController extends Controller
 {
@@ -16,23 +17,17 @@ class UserController extends Controller
     public function __construct(UserService $userservice)
     {
         $this->user = $userservice;
-        $this->middleware('auth');
+       // $this->middleware('auth');
     }
 
-    public function FindUserByid()
-    {
-        echo "index called";
-        $users = $this->user->all();
-        //$books = DB::select('select * from Books where id = ?', [1]);
-        dd($users);
-    }
 
     public function store(Request $request)
     {
         
      //   $request->user()->authorizeRoles(['employee', 'manager']);
-
-        $this->user->store($request->name, $request->email, $request->password,$request->role);
+        $newUser=$this->user->store($request->name, $request->email, $request->password,$request->role);
+        event(new UserEvent($newUser));
+        return $newUser;
     }
     /**
      * Display a listing of the resource.
@@ -53,7 +48,8 @@ class UserController extends Controller
      */
     public function show(Request $request)
     {
-        $this->user->show($request->id);
+      //  $request->user()->authorizeRoles(['employee']);
+        return $this->user->show($request->id);
 
     }
 
@@ -68,7 +64,8 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $request->user()->authorizeRoles(['manager']);
-        $this->user->update($request->id, $request->all());
+          $this->user->update($request->id, $request->all());
+          return $this->user->show($request->id);
     }
 
     /**

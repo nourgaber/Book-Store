@@ -13,7 +13,8 @@ use App\Notifications\SignupActivate;
 use App\Notifications\WelcomeEmail; 
 use App\Mail\UserAuthEmail;
 use Illuminate\Support\Facades\Mail;
-
+use App\Events\UserEvent;
+use App\Jobs\SendEmailJob;
 /**
  * Class UserService
  * @package App\Services
@@ -38,12 +39,8 @@ class AuthService implements AuthServiceInterface
                 'message' => 'This activation token is invalid.'
             ], 404);
         }
-        $user->active = true;
-        $user->activation_token = '';
-        $user->save();
-        
+        $user=$this->Userrepo-> activateUser($user);
         $user->notify(new WelcomeEmail($user));
-
         return $user;
     }
     
@@ -84,9 +81,16 @@ class AuthService implements AuthServiceInterface
         ]);
         
         $user = $this->Userrepo->store($request->name,$request->email,$request->password,$request->role);
-     
+        event(new UserEvent($user));
+
      $url = url('api/auth/signup/activate/'.$user->activation_token);
-        Mail::to(  $request->email)->queue(new UserAuthEmail($request->name,$url));
+     $when = now()->addMinutes(10);
+
+     dispatch(new SendEmailJob($user,$url));
+  
+     dd('done');
+      //  Mail::to(  $request->email)->queue(new UserAuthEmail($request->name,$url));
+        //->later($when, new UserAuthEmail($request->name,$url));
        // $user->notify(new SignupActivate($user));
 
         return response()->json([

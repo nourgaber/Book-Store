@@ -25,11 +25,9 @@ Route::group([
       'middleware' => 'auth:api'
     ], function() {
         Route::get('logout', 'AuthController@logout');
-        Route::get('/user/show', 'UserController@show');
-        Route::get('/user/index', 'UserController@index');
-        Route::get('/user/destroy', 'UserController@destroy');
-        Route::get('/user/update', 'UserController@update');
+        Route::get('index', 'UserController@index');
         Route::get('user', 'AuthController@user');
+
     });
 });
 
@@ -53,7 +51,17 @@ Route::group([
     Route::put('update', 'BookController@update');
 
 });
+Route::group([       
+    'middleware' => 'auth:api',
+    'middleware'=>'role',    
+    'prefix' => 'user'
+], function () {    
+    Route::get('destroy', 'UserController@destroy');
+    Route::put('update', 'UserController@update');
+    Route::get('show', 'UserController@show');
 
-Route::get('/user/index', 'UserController@index');
+});
+
+
 
 

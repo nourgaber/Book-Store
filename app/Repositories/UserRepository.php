@@ -10,7 +10,7 @@ class UserRepository implements UserRepositoryInterface
    $user = new User;
    $user->name =$name;
    $user->email = $email;
-   $user->password = $password;
+   $user->password = bcrypt($password);
    $user-> activation_token =str_random(60);
    $user->save();
    $user->roles()->attach(Role::where('name',$role)->first());
@@ -29,7 +29,6 @@ class UserRepository implements UserRepositoryInterface
 
     public function index()
     {
-        //echo "hiii";
         return User::all();
     }
     
@@ -41,10 +40,19 @@ class UserRepository implements UserRepositoryInterface
     }
     public function update($user_id, array $User_data)
     {
-        User::find($user_id)->update($User_data);
+         User::find($user_id)->update($User_data);
+        return User::find($user_id);
+
     }
     public function findUserByActivationToken($token)
     {
  return User::where('activation_token', $token)->first();
+    }
+    public function activateUser($user)
+    {
+        $user->active = true;
+        $user->activation_token = '';
+        $user->save();
+    return $user;    
     }
 }
