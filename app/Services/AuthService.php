@@ -1,7 +1,6 @@
 <?php
-
-
 namespace App\Services;
+
 use Illuminate\Http\Request;
 use App\Role;
 use App\Services\Interfaces\AuthServiceInterface;
@@ -15,6 +14,8 @@ use App\Mail\UserAuthEmail;
 use Illuminate\Support\Facades\Mail;
 use App\Events\UserEvent;
 use App\Jobs\SendEmailJob;
+use Infrastructure\Auth\Exceptions\InvalidCredentialsException;
+
 /**
  * Class UserService
  * @package App\Services
