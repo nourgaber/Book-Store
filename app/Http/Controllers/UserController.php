@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Services\UserService;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +48,12 @@ class UserController extends Controller
      */
     public function show(Request $request)
     {
-      //  $request->user()->authorizeRoles(['employee']);
+        try {
+            $user =  $this->user->show($request->id);
+        } catch (UserNotFoundException $exception) {
+            report($exception);
+            return back()->withError($exception->getMessage())->withInput();
+        }
         return $this->user->show($request->id);
 
     }

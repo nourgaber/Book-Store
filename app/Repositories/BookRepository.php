@@ -1,15 +1,20 @@
 <?php
 namespace App\Repositories;
-use App\Book;
+
+use App\Models\Book;
 use App\Repositories\Interfaces\BookRepositoryInterface;
+
 class BookRepository implements BookRepositoryInterface
 {
-  
 
     public function show($book_id)
     {
 
-    return Book::find($book_id);
+        $book = Book::find($book_id);
+        if (!$book) {
+            throw new CustomException('Book_NOT_FOUND');
+        }
+        return $book;
     }
 
     public function index()
@@ -18,22 +23,23 @@ class BookRepository implements BookRepositoryInterface
     }
     public function delete($book_id)
     {
-        Book::destroy($book_id);
-        echo 'book deleted';
-
+        $book = Book::find($book_id);
+        if(!$book)
+        throw new CustomException('Book_NOT_FOUND');
+        $book->delete();
     }
     public function update($book_id, array $book_data)
     {
-        $book= Book::find($book_id);
+        $book = Book::find($book_id);
+        if(!$book)
+        throw new CustomException('Book_NOT_FOUND');
         $book->update($book_data);
         return $book;
-      
 
     }
     public function store(array $book_data)
     {
         return $Book = Book::create($book_data);
     }
-  
 
 }

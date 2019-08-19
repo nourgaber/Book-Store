@@ -1,7 +1,7 @@
 <?php
 
-namespace App;
-use App\Book;
+namespace App\Models;
+use App\Models\Book;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;

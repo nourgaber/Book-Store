@@ -11,7 +11,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\User;
+use App\Models\User;
 use App\Mail\UserAuthEmail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
@@ -56,10 +56,9 @@ class AuthController extends Controller
      */
 
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        // dd($request->user());       
-        return $this->AuthService ->login( $request);
+        return $this->AuthService ->login($request->email,$request->password);
     }
  /**
      * Logout user (Revoke the token)

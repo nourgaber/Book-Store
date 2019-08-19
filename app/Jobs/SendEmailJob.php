@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
 
-use App\User;
+use App\Models\User;
 use Illuminate\Mail\Mailable;
 use App\Mail\UserAuthEmail;
 use Mail;

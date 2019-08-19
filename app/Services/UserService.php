@@ -8,7 +8,7 @@ use App\Services\Interfaces\UserServiceInterface;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use App\User;
+use App\Models\User;
 use App\Notifications\SignupActivate;
 use App\Notifications\WelcomeEmail; 
 /**

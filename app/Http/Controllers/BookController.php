@@ -25,8 +25,9 @@ class BookController extends Controller
         return   $books =$this->book ->index();
     }
 
-    public function store(Request $request)
+    public function store(BookRequest $request)
     {
+        
         return  $this->book->store( $request->all());
     }
 

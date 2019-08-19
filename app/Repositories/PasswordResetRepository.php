@@ -1,6 +1,6 @@
 <?php
 namespace App\Repositories;
-use App\PasswordReset;
+use App\Models\PasswordReset;
 
 
 class PasswordResetRepository 

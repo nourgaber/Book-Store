@@ -46,6 +46,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof \App\Exceptions\CustomException) {
+              return ResponseService::generateResponseWithError(
+                $exception->getCustomExceptionStatusCode(),
+                $exception->getCustomExceptionMessage()
+            );
+        }
+        
+
         return parent::render($request, $exception);
     }
 }
