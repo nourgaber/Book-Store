@@ -5,19 +5,28 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ErrorConstants
 {
-    public const USER_NOT_FOUND = 'User not found';
-    public const Book_NOT_FOUND = 'Book not found';
-    public const ACTIVATION_TOKEN = 'activation token invalid';
-    public const Unauthorized_User = 'Unauthorized user login';
-
+    public const ERROR_MESSAGES =[
+        'USER_NOT_FOUND' => 'User not found',
+        'Book_NOT_FOUND' => 'Book not found',
+        'Email_NOT_FOUND' => 'wrong email',
+        'WRONG_PASSWORD' => 'wrong password',
+        'ACTIVATION_TOKEN' => 'activation token invalid',
+        'Unauthorized_User' => 'Unauthorized user login',
+        'ResetTokenInvalid' => 'Reset password token invalid',
+        'UNAUTHORIZED_ROLE' =>'This action is unauthorized',
+    ];
+    
     public const ERROR_CODES = [
-        self::USER_NOT_FOUND => Response::HTTP_NOT_FOUND,
-        self::Book_NOT_FOUND => Response::HTTP_NOT_FOUND,
-        self ::ACTIVATION_TOKEN =>Response::HTTP_NOT_FOUND,
-        self ::Unauthorized_User =>Response::HTTP_UNAUTHORIZED,
+        'USER_NOT_FOUND' => Response::HTTP_NOT_FOUND,
+        'Book_NOT_FOUND' => Response::HTTP_NOT_FOUND,
+        'Email_NOT_FOUND' => Response::HTTP_NOT_FOUND,
+        'ACTIVATION_TOKEN' => Response::HTTP_NOT_FOUND,
+        'Unauthorized_User' => Response::HTTP_UNAUTHORIZED,
+        'ResetTokenInvalid' => Response::HTTP_UNAUTHORIZED,
+        'WRONG_PASSWORD' => Response::HTTP_UNAUTHORIZED,
+        'UNAUTHORIZED_ROLE'=> Response::HTTP_UNAUTHORIZED,
 
-      
-      
+
     ];
 
     public const HTTP_BAD_REQUEST = 400;

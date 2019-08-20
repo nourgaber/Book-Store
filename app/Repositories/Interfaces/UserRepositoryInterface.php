@@ -9,7 +9,7 @@ interface UserRepositoryInterface
 
     public function index();
     public function destroy($User_id);
-    public function update($User_id, array $User_data);
+    public function update($User_id,$name,$password);
     //public function login($email,$password);
    // public function singup();
  //   public function logout();

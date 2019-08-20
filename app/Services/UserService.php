@@ -1,53 +1,75 @@
 <?php
 
-
 namespace App\Services;
-use Illuminate\Http\Request;
 
-use App\Services\Interfaces\UserServiceInterface;
-use App\Repositories\UserRepository;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 use App\Models\User;
-use App\Notifications\SignupActivate;
-use App\Notifications\WelcomeEmail; 
+use App\Repositories\UserRepository;
+use App\Services\Interfaces\UserServiceInterface;
+use App\Constants\SuccessConstants;
+use App\Services\ResponseService;
+use App\Exceptions\CustomException;
+
 /**
  * Class UserService
  * @package App\Services
  */
 class UserService implements UserServiceInterface
 {
-    protected $Userrepo;
+    protected $userRepository;
     /**
      * UserService constructor.
      */
-    public function __construct(UserRepository $Userrepo)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->Userrepo = $Userrepo;
+        $this->userRepository = $userRepository;
     }
 
-    public function store($name,$email,$password)
+    public function store($name, $email, $password)
     {
-        return $this->Userrepo ->store($name,$email,$password);
+        $user = $this->userRepository->store($name, $email, $password);
+        $message = 'UserCreated';
+        $responseMessage=SuccessConstants::Success_MESSAGES[$message];
+        $httpcode=SuccessConstants::Success_CODES[$message];
+        return ResponseService::generateResponseWithSuccessData($responseMessage,$httpcode,$user);
     }
     public function show($id)
     {
-        return  $this->Userrepo -> show($id);
+        $user = $this->userRepository->show($id);
+        if (!$user) {
+            throw new CustomException('USER_NOT_FOUND');
+        }
+        $message = 'UserFound';
+        $responseMessage=SuccessConstants::Success_MESSAGES[$message];
+        $httpcode=SuccessConstants::Success_CODES[$message];
+        return ResponseService::generateResponseWithSuccessData($responseMessage,$httpcode,$user);
     }
-   
+
     public function index()
     {
-      return  $this->Userrepo -> index();
+        return $this->userRepository->index();
     }
     public function destroy($id)
     {
-        $this->Userrepo -> destroy($id);
+        $user = $this->userRepository->destroy($id);
+        if (!$user) {
+            throw new CustomException('USER_NOT_FOUND');
+        }
+        $message = 'UserDeleted';
+        $responseMessage=SuccessConstants::Success_MESSAGES[$message];
+        $httpcode=SuccessConstants::Success_CODES[$message];
+        return ResponseService::generateResponseWithSuccess($responseMessage,$httpcode);
     }
-    public function update($id,array $User_data)
+    public function update($id,$name, $email)
     {
-         $this->Userrepo -> update($id,$User_data);
-         return  $this->Userrepo -> show($id);
-
+        $user = $this->userRepository->update($id,$name, $email);
+        if (!$user) {
+            throw new CustomException('USER_NOT_FOUND');
+        }
+        $message = 'UserUpdated';
+        $responseMessage=SuccessConstants::Success_MESSAGES[$message];
+        $httpcode=SuccessConstants::Success_CODES[$message];
+        return ResponseService::generateResponseWithSuccessData($responseMessage,$httpcode,$user);
     }
-   
+
+    
 }

@@ -4,6 +4,7 @@ namespace App\Repositories;
 use App\Models\Role;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use Illuminate\Support\Facades\Hash;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -12,29 +13,28 @@ class UserRepository implements UserRepositoryInterface
         $user = new User;
         $user->name = $name;
         $user->email = $email;
-        $user->password = bcrypt($password);
+        $user->password = Hash::make($password);
         $user->activation_token = str_random(60);
         $user->save();
         $user->roles()->attach(Role::where('name', $role)->first());
-        // $user->roles()
-        //    ->attach(Role::where('name','employee')->first());
         return $user;
     }
     public function show($user_id)
     {
-        $user = User::find($user_id);
-        if (!$user) {
-            throw new CustomException('USER_NOT_FOUND');
-        }
-        return $user;
+        return User::find($user_id);
+
     }
     public function showUserByemail($user_email)
     {
-        $user= User::where('email', $user_email)->first();
-        if (!$user) {
-            throw new CustomException('USER_NOT_FOUND');
-        }
-        return $user;
+       return User::where('email', $user_email)->first();   
+    }
+    public function checkUserPassword($user_email,$password)
+    {
+       $user =User::where('email', $user_email)->first();
+       if($user->password==Hash::make($password))
+       return true;
+       else
+       return false;   
     }
 
     public function index()
@@ -45,26 +45,26 @@ class UserRepository implements UserRepositoryInterface
     public function destroy($user_id)
     {
         $user = User::find($user_id);
-        if (!$user) {
-            throw new CustomException('USER_NOT_FOUND');
-        }
+        if(!$user)
+        return false;
         $user->delete();
+        return true;
     }
-    public function update($user_id, array $User_data)
+    public function update($user_id, $name, $email)
     {
         $user = User::find($user_id);
-        if (!$user) {
-            throw new CustomException('USER_NOT_FOUND');
-        }
-        $user->update($User_data);
+        if(!$user)
+        return false;
+        if($name != null)
+        $user->name = $name;
+        if($email != null)
+        $user->email = $email;
+        $user->save();
         return $user;
     }
     public function findUserByActivationToken($token)
     {
-        $user= User::where('activation_token', $token)->first();
-        if (!$user) {
-            throw new CustomException('ACTIVATION_TOKEN');
-        }
+        $user = User::where('activation_token', $token)->first();
         return $user;
     }
     public function activateUser($user)
@@ -74,4 +74,5 @@ class UserRepository implements UserRepositoryInterface
         $user->save();
         return $user;
     }
+    
 }

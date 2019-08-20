@@ -15,9 +15,9 @@ use App\Notifications\WelcomeEmail;
 interface AuthServiceInterface 
 {
     public function signupActivate($token);
-    public function login( Request $request);
-    public function signup(Request $request);
-    public function logout(Request $request);
+    public function login($name,$email,$remember_me);
+    public function signup($name,$email,$password,$role);
+    public function logout($user);
 }
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\BookService;
+use App\Http\Requests\BookRequest;
 class BookController extends Controller
 {
     protected $book;
@@ -13,27 +14,26 @@ class BookController extends Controller
         $this->book = $bookservice;
     }
 
-    public  function show(Request $request){
+    public  function read(Request $request){
         //echo "show called";
         return  $books =$this->book ->show($request->id);
         //$books = DB::select('select * from Books where id = ?', [1]);
         //dd($books);
     }
 
-    public function index(Request $request)
+    public function getAll(Request $request)
     {
         return   $books =$this->book ->index();
     }
 
-    public function store(BookRequest $request)
+    public function create(BookRequest $request)
     {
-        
-        return  $this->book->store( $request->all());
+        return  $this->book->store($request->book_name,$request->book_renting_price,$request->book_price,$request->author_id);
     }
 
     public function update(Request $request)
     {
-        return $books =$this->book->update($request->id,$request->all());
+        return $books =$this->book->update($request->id,$request->book_name,$request->book_renting_price,$request->book_price,$request->author_id);
 
     }
 

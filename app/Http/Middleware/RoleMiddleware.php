@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Middleware;
-
+use App\Services\RoleService;
 use Closure;
 
 class RoleMiddleware
@@ -15,7 +15,7 @@ class RoleMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $request->user('api')->authorizeRoles(['manager']);
+        RoleService::authorizeRoles($request->user('api'),['manager']);
         return $next($request);
     }
 }

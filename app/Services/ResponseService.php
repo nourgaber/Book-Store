@@ -6,9 +6,9 @@ use App\Constants\ErrorConstants;
 class ResponseService {
 
 
-    public function generateResponseWithError ($message,$code )
+    public static function generateResponseWithError ($message,$code )
 {
-    return $this->response([
+        return response()->json([
         'error' => [
             'message' => $message,
             'status_code' => $code
@@ -16,16 +16,25 @@ class ResponseService {
         ],$code);
 
 }
-
-public function generateResponseWithSuccess ($message,$code,$data)
+public static function generateResponseWithSuccess ($message,$code)
 {
-    return $this->response([
+    return response()->json([
+        'success' => [
+            'message' => $message,
+            'status_code' => $code
+        ]
+        ], $code);
+
+}
+public static function generateResponseWithSuccessData ($message,$code,$data)
+{
+    return response()->json([
         'success' => [
             'data' => $data,
             'message' => $message,
             'status_code' => $code
         ]
-        ],$code);
+        ], $code);
 
 }
 }

@@ -15,39 +15,37 @@ use Illuminate\Http\Request;
 Route::group([
     'prefix' => 'auth'
 ], function () {
-    Route::post('login', 'AuthController@login');
-    Route::post('signup', 'AuthController@signup');
-    Route::get('signup/activate/{token}', 'AuthController@signupActivate');
-    Route::get('testemail/{token}', 'EmailController@sendEmail');
+    Route::post('login', 'UserController@login');
+    Route::post('signup', 'UserController@signup');
+    Route::get('signup/activate/{token}', 'UserController@signupActivate');
 
   
     Route::group([
       'middleware' => 'auth:api'
     ], function() {
-        Route::get('logout', 'AuthController@logout');
-        Route::get('index', 'UserController@index');
-        Route::get('user', 'AuthController@user');
+        Route::get('logout', 'UserController@logout');
+      
 
     });
 });
-
-Route::group([    
-    'namespace' => 'Auth',    
+Route::get('getAll', 'UserController@getAll');
+Route::get('user', 'UserController@user');
+Route::group([        
     'middleware' => 'api',    
     'prefix' => 'password'
 ], function () {    
-    Route::post('create', 'PasswordResetController@create');
-    Route::get('find/{token}', 'PasswordResetController@find');
-    Route::post('reset', 'PasswordResetController@reset');
+    Route::post('create', 'UserController@createPassword');
+    Route::get('find/{token}', 'UserController@find');
+    Route::post('reset', 'UserController@reset');
 });
 
 Route::group([       
     'prefix' => 'Book'
 ], function () {    
     Route::delete('delete', 'BookController@delete');
-    Route::get('show', 'BookController@show');
-    Route::get('index', 'BookController@index');
-    Route::post('store', 'BookController@store');
+    Route::get('read', 'BookController@read');
+    Route::get('getAll', 'BookController@getAll');
+    Route::post('create', 'BookController@create');
     Route::put('update', 'BookController@update');
 
 });
@@ -58,7 +56,7 @@ Route::group([
 ], function () {    
     Route::get('destroy', 'UserController@destroy');
     Route::put('update', 'UserController@update');
-    Route::get('show', 'UserController@show');
+    Route::get('read', 'UserController@read');
 
 });
 

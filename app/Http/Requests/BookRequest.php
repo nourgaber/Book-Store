@@ -13,7 +13,7 @@ class BookRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,8 +26,8 @@ class BookRequest extends FormRequest
         return [
             'book_name' => 'required',
             'book_renting_price' => 'required',
-             'book_price'=> 'required',
-             'author_id'=> 'required|integer|exists:authors,id',
+             'book_price'=> 'required|integer',
+             'author_id'=> 'required|integer|exists:Author,id',
         ];
     }
 }

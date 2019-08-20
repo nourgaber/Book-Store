@@ -11,7 +11,6 @@
 |
 */
 
-Route::get('/', 'UserController@FindUserByid');
 
 Auth::routes();
 
